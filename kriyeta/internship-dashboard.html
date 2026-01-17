@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Command Center | Pathlynx</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cards.css">
+</head>
+
+<body class="dash-v2-body">
+
+    <!-- Sidebar V2 -->
+    <aside class="sidebar-v2" id="sidebar">
+        <div class="sidebar-brand">
+            <span class="material-icons-round">terminal</span>
+            <span>Path<span class="highlight">lynx</span></span>
+        </div>
+
+        <div class="sidebar-scroll">
+            <div class="nav-group-title">Main Menu</div>
+            <a href="dashboard.html" class="nav-item-v2">
+                <span class="material-icons-round">dashboard</span>
+                Dashboard
+            </a>
+            <a href="dashboard.html#section-profile" class="nav-item-v2">
+                <span class="material-icons-round">person</span>
+                My Profile
+                <span class="badge">95%</span>
+            </a>
+            <a href="#" class="nav-item-v2 active">
+                <span class="material-icons-round">work_outline</span>
+                Internships
+                <span class="badge">new</span>
+            </a>
+            <a href="placement-dashboard.html" class="nav-item-v2">
+                <span class="material-icons-round">event_note</span>
+                Placements
+            </a>
+            <a href="hackathon-dashboard.html" class="nav-item-v2">
+                <span class="material-icons-round">code</span>
+                Hackathons
+                <span class="badge" style="background:#ea4335; color:white;">Live</span>
+            </a>
+            <a href="learning-dashboard.html" class="nav-item-v2">
+                <span class="material-icons-round">school</span>
+                Learning
+            </a>
+            <a href="resume.html" class="nav-item-v2">
+                <span class="material-icons-round">description</span>
+                Resume Hub
+            </a>
+            <a href="#" class="nav-item-v2" data-target="section-tracker">
+                <span class="material-icons-round">track_changes</span>
+                Application Tracker
+            </a>
+            <a href="#" class="nav-item-v2" data-target="section-ai">
+                <span class="material-icons-round">auto_awesome</span>
+                AI Insights
+            </a>
+
+            <div class="nav-group-title">System</div>
+            <a href="#" class="nav-item-v2" data-target="section-notifications">
+                <span class="material-icons-round">notifications</span>
+                Notifications
+            </a>
+            <a href="#" class="nav-item-v2" data-target="section-help">
+                <span class="material-icons-round">help_outline</span>
+                Help & Support
+            </a>
+            <a href="#" class="nav-item-v2" data-target="section-settings">
+                <span class="material-icons-round">settings</span>
+                Settings
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="menu-item logout" onclick="logout()"
+                style="width: 100%; border:none; background:none; cursor:pointer;">
+                <span class="material-icons-round">logout</span>
+                Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content V2 -->
+    <div class="main-content-v2">
+
+        <!-- Top Bar -->
+        <header class="topbar-v2">
+            <div style="display: flex; align-items: center;">
+                <button class="toggle-menu" onclick="toggleSidebar()">
+                    <span class="material-icons-round">menu</span>
+                </button>
+                <div class="search-v2">
+                    <span class="material-icons-round">search</span>
+                    <input type="text" placeholder="Search internships, companies, roles...">
+                </div>
+            </div>
+
+            <div class="topbar-actions">
+                <button class="icon-btn-v2">
+                    <span class="material-icons-round">notifications</span>
+                    <span class="dot"></span>
+                </button>
+                <div class="profile-dropdown-btn">
+                    <div class="user-avatar" style="background-image: url('assets/students.png');"></div>
+                    <div class="profile-info-text">
+                        <span class="name-text user-name-display">Student</span>
+                        <span class="role-text">3rd Year • CS</span>
+                    </div>
+                    <span class="material-icons-round">expand_more</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Scroll Area -->
+        <div class="content-scroll">
+
+            <!-- Internship Page Content (Static, no sections) -->
+            <div class="internship-layout" style="padding: 1.5rem;">
+
+                <!-- 1. Left Sidebar: Filters -->
+                <aside class="filter-sidebar">
+                    <div class="filter-toggle">
+                        <label>Faculty Recommended</label>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="filter-group">
+                        <div class="filter-title">Opportunity Type</div>
+                        <label class="filter-option">
+                            <input type="checkbox" checked> Internship (12)
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox"> Hackathon (5)
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox"> Placement (8)
+                        </label>
+                    </div>
+
+                    <div class="filter-group">
+                        <div class="filter-title">Mode</div>
+                        <label class="filter-option">
+                            <input type="checkbox" checked> Remote
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox"> In-Office
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox"> Hybrid
+                        </label>
+                    </div>
+
+                    <div class="filter-group">
+                        <div class="filter-title">Domain</div>
+                        <label class="filter-option">
+                            <input type="checkbox"> AI/ML
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox"> Web Development
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox"> Data Analytics
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox"> Java Developer
+                        </label>
+                    </div>
+
+                    <div class="filter-group">
+                        <div class="filter-title">Duration</div>
+                        <label class="filter-option">
+                            <input type="checkbox"> 1-2 Months
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox"> 3-6 Months
+                        </label>
+                    </div>
+                </aside>
+
+                <!-- 2. Main Feed (Cards) -->
+                <div class="internship-feed">
+                    <div class="section-header"
+                        style="background:none; box-shadow:none; padding:0 0 1rem 0; border-radius:0;">
+                        <h2>Internship Opportunities</h2>
+                        <span style="font-size:0.9rem; color:#5f6368">Showing 24 results</span>
+                    </div>
+
+                    <!-- Container for Dynamic Internships -->
+                    <div id="internship-container">
+                        <!-- Content will be loaded from data.js via internship-logic.js -->
+                        <div style="text-align:center; padding:2rem; color:#666;">
+                            Loading internships...
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 3. Right Sidebar: Faculty Area -->
+                <aside class="faculty-sidebar">
+                    <div class="faculty-card">
+                        <div class="faculty-header">
+                            <span class="material-icons-round" style="color:#ea4335">local_fire_department</span>
+                            Faculty Highlights
+                        </div>
+                        <div class="highlight-item">
+                            <h5>Google Interview Prep</h5>
+                            <p>Prof. Sharma recommends reviewing Graph Algorithms before the drive.</p>
+                        </div>
+                        <div class="highlight-item" style="background:#fff8e1; border-color:#fbbc04">
+                            <h5>Resume Deadline</h5>
+                            <p>Submit updated resume for Microsoft drive by tomorrow 5 PM.</p>
+                        </div>
+                    </div>
+
+                    <div class="faculty-card">
+                        <div class="faculty-header">
+                            <span class="material-icons-round" style="color:#1a73e8">school</span>
+                            Internal Opps
+                        </div>
+                        <a href="#" class="opp-link">
+                            <div class="opp-icon">
+                                <span class="material-icons-round">code</span>
+                            </div>
+                            <div>
+                                <div style="font-weight:600; font-size:0.9rem">College Hackathon</div>
+                                <div style="font-size:0.8rem; color:var(--text-secondary)">Feb 15-16 • Main Audi</div>
+                            </div>
+                        </a>
+                        <a href="#" class="opp-link">
+                            <div class="opp-icon" style="background:#e6f4ea; color:#34a853">
+                                <span class="material-icons-round">science</span>
+                            </div>
+                            <div>
+                                <div style="font-weight:600; font-size:0.9rem">Research Assistant</div>
+                                <div style="font-size:0.8rem; color:var(--text-secondary)">AI Lab • Prof. Rao</div>
+                            </div>
+                        </a>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="db.js"></script>
+    <script src="auth.js"></script>
+    </div>
+    </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+    <script src="data.js"></script>
+    <script src="tracking.js"></script>
+    <script src="internship-logic.js"></script>
+    <script src="activity-tracker.js"></script>
+</body>
+
+</html>

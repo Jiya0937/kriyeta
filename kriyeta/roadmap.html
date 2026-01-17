@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Roadmaps | Pathlynx</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .roadmap-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            border-left: 5px solid #2563eb;
+        }
+
+        .roadmap-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .level-timeline {
+            border-left: 2px solid #e2e8f0;
+            margin-left: 1.5rem;
+            padding-left: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        .level-item {
+            position: relative;
+            margin-bottom: 2.5rem;
+        }
+
+        .level-item::before {
+            content: '';
+            position: absolute;
+            left: -2.6rem;
+            top: 0;
+            width: 1rem;
+            height: 1rem;
+            background: white;
+            border: 3px solid #64748b;
+            border-radius: 50%;
+        }
+
+        .resource-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #2563eb;
+            text-decoration: none;
+            background: #eff6ff;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            margin-right: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .resource-link:hover {
+            background: #dbeafe;
+        }
+
+        /* New Gallery Styles */
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .roadmap-summary-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid #eee;
+        }
+
+        .roadmap-summary-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+            padding: 0;
+        }
+
+        .btn-back:hover {
+            color: #1a73e8;
+        }
+    </style>
+</head>
+
+<body class="dash-v2-body">
+
+    <!-- Sidebar V2 -->
+    <aside class="sidebar-v2" id="sidebar">
+        <div class="sidebar-brand">
+            <span class="material-icons-round">terminal</span>
+            <span>Path<span class="highlight">lynx</span></span>
+        </div>
+
+        <div class="sidebar-scroll">
+            <div class="nav-group-title">Main Menu</div>
+            <a href="dashboard.html" class="nav-item-v2">
+                <span class="material-icons-round">dashboard</span>
+                Dashboard
+            </a>
+            <a href="dashboard.html#section-profile" class="nav-item-v2">
+                <span class="material-icons-round">person</span>
+                My Profile
+                <span class="badge">95%</span>
+            </a>
+            <a href="internship-dashboard.html" class="nav-item-v2">
+                <span class="material-icons-round">work_outline</span>
+                Internships
+                <span class="badge">new</span>
+            </a>
+            <a href="placement-dashboard.html" class="nav-item-v2">
+                <span class="material-icons-round">event_note</span>
+                Placements
+            </a>
+            <a href="hackathon-dashboard.html" class="nav-item-v2">
+                <span class="material-icons-round">code</span>
+                Hackathons
+                <span class="badge" style="background:#ea4335; color:white;">Live</span>
+            </a>
+            <a href="roadmap.html" class="nav-item-v2 active">
+                <span class="material-icons-round">map</span>
+                Roadmaps
+            </a>
+            <a href="resume.html" class="nav-item-v2">
+                <span class="material-icons-round">description</span>
+                Resume Hub
+            </a>
+            <a href="tracker.html" class="nav-item-v2">
+                <span class="material-icons-round">track_changes</span>
+                Application Tracker
+            </a>
+            <a href="#" class="nav-item-v2" data-target="section-ai">
+                <span class="material-icons-round">auto_awesome</span>
+                AI Insights
+            </a>
+
+            <div class="nav-group-title">System</div>
+            <a href="#" class="nav-item-v2" data-target="section-notifications">
+                <span class="material-icons-round">notifications</span>
+                Notifications
+            </a>
+            <a href="#" class="nav-item-v2" data-target="section-help">
+                <span class="material-icons-round">help_outline</span>
+                Help & Support
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="menu-item logout" onclick="logout()"
+                style="width: 100%; border:none; background:none; cursor:pointer;">
+                <span class="material-icons-round">logout</span>
+                Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content V2 -->
+    <div class="main-content-v2">
+
+        <!-- Top Bar -->
+        <header class="topbar-v2">
+            <div style="display: flex; align-items: center;">
+                <button class="toggle-menu" onclick="toggleSidebar()">
+                    <span class="material-icons-round">menu</span>
+                </button>
+                <div class="search-v2">
+                    <span class="material-icons-round">search</span>
+                    <input type="text" placeholder="Search skills, courses...">
+                </div>
+            </div>
+
+            <div class="topbar-actions">
+                <button class="icon-btn-v2">
+                    <span class="material-icons-round">notifications</span>
+                </button>
+                <div class="profile-dropdown-btn">
+                    <div class="user-avatar" style="background-image: url('assets/students.png');"></div>
+                    <div class="profile-info-text">
+                        <span class="name-text user-name-display">Student</span>
+                        <span class="role-text">3rd Year • CS</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Scroll Area -->
+        <div class="content-scroll">
+            <div style="padding: 2rem; max-width: 1000px; margin: 0 auto;">
+
+                <div class="section-header">
+                    <h2>Learning Roadmaps 🗺️</h2>
+                    <p style="color:#64748b; margin-top:0.5rem;">Select a career path to view its complete learning
+                        journey.</p>
+                </div>
+
+                <!-- 1. Gallery View (All Roadmaps) -->
+                <div id="roadmap-gallery" class="roadmap-grid">
+                    <!-- Loaded via roadmap-logic.js -->
+                </div>
+
+                <!-- 2. Detail View (Single Roadmap) -->
+                <div id="roadmap-detail" style="display: none;">
+                    <button onclick="showGallery()" class="btn-back">
+                        <span class="material-icons-round">arrow_back</span> Back to All Courses
+                    </button>
+                    <div id="detail-content">
+                        <!-- Content injected here -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+    <script src="data.js"></script>
+    <script src="roadmap-logic.js"></script>
+    <script src="activity-tracker.js"></script>
+</body>
+
+</html>

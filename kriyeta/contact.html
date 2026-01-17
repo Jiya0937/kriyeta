@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Pathlynx</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+</head>
+
+<body class="contact-body">
+
+    <!-- Navigation -->
+    <nav class="navbar glass-nav">
+        <div class="logo">
+            <span class="material-icons-round">terminal</span>
+            <span>Path<span class="highlight">lynx</span></span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Pathlynx</a>
+            <a href="career-platform.html">Career Platform</a>
+            <a href="contact.html" class="active-link">Contact</a>
+            <a href="help.html" class="btn-text">Help</a>
+        </div>
+    </nav>
+
+    <!-- Main Contact Section -->
+    <main class="contact-main">
+        <div class="contact-grid">
+
+            <!-- Left Side: Info & Visuals -->
+            <div class="contact-info-side slide-in-left">
+                <div class="section-badge badge-blue">Here to Help</div>
+                <h1>Get in Touch.</h1>
+                <p>Have questions about placements, internships, or your account? We're here to help you navigate your
+                    career journey.</p>
+
+                <div class="contact-cards">
+                    <div class="info-card">
+                        <div class="icon-circle blue">
+                            <span class="material-icons-round">phone</span>
+                        </div>
+                        <div>
+                            <h4>Call Us</h4>
+                            <p class="data-text">7772022221</p>
+                            <span class="sub-text">Mon-Fri, 9am - 6pm</span>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="icon-circle green">
+                            <span class="material-icons-round">email</span>
+                        </div>
+                        <div>
+                            <h4>Email Support</h4>
+                            <p class="data-text"><a href="mailto:support@pathlynx.edu">support@pathlynx.edu</a></p>
+                            <span class="sub-text">We reply within 24 hours</span>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="icon-circle orange">
+                            <span class="material-icons-round">location_on</span>
+                        </div>
+                        <div>
+                            <h4>Placement Cell</h4>
+                            <p class="data-text">Block C, 2nd Floor</p>
+                            <span class="sub-text">Main Campus Building</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-visual">
+                    <img src="assets/contact_support.png" alt="Friendly Support Team" class="animate-float">
+                </div>
+            </div>
+
+            <!-- Right Side: Contact Form -->
+            <div class="contact-form-side slide-in-right">
+                <div class="form-wrapper">
+                    <h3>Send us a Message</h3>
+                    <form id="contact-form">
+                        <div class="input-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" placeholder="Enter your name" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" placeholder="e.g. aditya@college.edu" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="query-type">Purpose of Inquiry</label>
+                            <select id="query-type" required>
+                                <option value="" disabled selected>Select topic</option>
+                                <option value="technical">Technical Support</option>
+                                <option value="placement">Placement Question</option>
+                                <option value="partnership">Company Partnership</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" rows="4" placeholder="How can we help you?" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-primary btn-block">Send Message</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Pathlynx. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('contact-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const btn = this.querySelector('button');
+            const originalText = btn.textContent;
+
+            btn.textContent = 'Sending...';
+            btn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                alert('Thank you! Your message has been sent to our support team.');
+                this.reset();
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>

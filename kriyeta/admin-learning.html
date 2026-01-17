@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Learning Analytics | Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cards.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .search-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 2rem;
+            border: 1px solid #eee;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .search-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body style="background:#f8f9fc; font-family:'Inter', sans-serif;">
+
+    <div style="max-width:1000px; margin:2rem auto; padding:0 1rem;">
+
+        <header style="margin-bottom:2rem; display:flex; align-items:center; gap:12px;">
+            <a href="admin.html" style="text-decoration:none; color:#666; display:flex; align-items:center;">
+                <span class="material-icons-round">arrow_back</span> Back
+            </a>
+            <h1 style="font-size:1.8rem; margin:0; color:#1c1c1c;">Student Learning Analytics</h1>
+        </header>
+
+        <!-- Search -->
+        <div class="search-container">
+            <span class="material-icons-round" style="color:#888;">search</span>
+            <input type="text" id="searchInput" class="search-input"
+                placeholder="Enter Student Enrollment Number (e.g. 0827CS221001)">
+            <button onclick="searchStudent()" class="search-btn">Search</button>
+        </div>
+
+        <!-- Result Section -->
+        <div id="resultContainer" style="display:none;">
+            <!-- Student Header -->
+            <div
+                style="background:white; padding:1.5rem; border-radius:12px; border-left:4px solid var(--primary-color); box-shadow:0 2px 8px rgba(0,0,0,0.05); margin-bottom:1.5rem;">
+                <h2 id="studentEnrollment" style="margin:0 0 0.5rem 0;"></h2>
+                <span class="badge" style="background:#e8f0fe; color:var(--primary-color);">Student</span>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid-v2" style="margin-bottom:2rem;">
+                <div class="stat-card-rich">
+                    <div class="stat-header-rich">
+                        <div class="stat-icon-rich"><span class="material-icons-round">schedule</span></div>
+                        <span class="stat-value-rich" id="totalHours">-</span>
+                    </div>
+                    <div class="stat-label-rich">Total Hours</div>
+                </div>
+                <div class="stat-card-rich">
+                    <div class="stat-header-rich">
+                        <div class="stat-icon-rich" style="background:#e6f4ea; color:#34a853;"><span
+                                class="material-icons-round">calendar_today</span></div>
+                        <span class="stat-value-rich" id="activeDays">-</span>
+                    </div>
+                    <div class="stat-label-rich">Active Days</div>
+                </div>
+            </div>
+
+            <!-- Breakdown -->
+            <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="section-container">
+                    <h3>Domain Breakdown</h3>
+                    <table style="width:100%; margin-top:1rem; border-collapse:collapse;">
+                        <thead>
+                            <tr style="text-align:left; color:#666; font-size:0.85rem; border-bottom:1px solid #eee;">
+                                <th style="padding:8px 0;">Domain</th>
+                                <th style="padding:8px 0;">Hours</th>
+                            </tr>
+                        </thead>
+                        <tbody id="domainTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="section-container">
+                    <h3>Recent Activity Logs</h3>
+                    <div id="recentLogs"
+                        style="margin-top:1rem; font-size:0.9rem; color:#555; max-height:200px; overflow-y:auto;"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="errorMsg" style="display:none; text-align:center; color:#c5221f; margin-top:2rem; font-weight:500;">
+        </div>
+        <div id="loading" style="display:none; text-align:center; color:#666; margin-top:2rem;">Searching...</div>
+
+    </div>
+
+    <script>
+        async function searchStudent() {
+            const enrollment = document.getElementById('searchInput').value.trim();
+            if (!enrollment) return;
+
+            // UI Reset
+            document.getElementById('resultContainer').style.display = 'none';
+            document.getElementById('errorMsg').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+
+            try {
+                const res = await fetch(`http://localhost:5000/api/learning/admin/student/${enrollment}`);
+                if (!res.ok) throw new Error("Student not found or no data available.");
+
+                const data = await res.json();
+                renderData(data);
+            } catch (err) {
+                document.getElementById('errorMsg').textContent = err.message;
+                document.getElementById('errorMsg').style.display = 'block';
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        function renderData(data) {
+            document.getElementById('studentEnrollment').textContent = data.enrollmentNo;
+            document.getElementById('totalHours').textContent = data.totalHours + 'h';
+            document.getElementById('activeDays').textContent = data.activeDays;
+
+            // Table
+            const tbody = document.getElementById('domainTableBody');
+            tbody.innerHTML = data.domainBreakdown.map(d => `
+                <tr style="border-bottom:1px solid #f8f9fa;">
+                    <td style="padding:8px 0; font-weight:500;">${d.domain}</td>
+                    <td style="padding:8px 0;">${d.hours}</td>
+                </tr>
+            `).join('');
+
+            // Logs
+            const logsDiv = document.getElementById('recentLogs');
+            logsDiv.innerHTML = data.recentActivity.map(a => `
+                <div style="padding:8px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">
+                    <span>${new Date(a.date).toLocaleDateString()}</span>
+                    <span>${a.domain} (${a.duration}m)</span>
+                </div>
+            `).join('');
+
+            document.getElementById('resultContainer').style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

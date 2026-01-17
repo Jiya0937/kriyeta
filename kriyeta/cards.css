@@ -1,0 +1,182 @@
+/* =========================================
+   Universal Opportunity Card (Unstop Style)
+   ========================================= */
+
+/* Grid Layout for Cards */
+.placement-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+.opp-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 16px;
+    padding: 0;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+}
+
+.opp-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    border-color: transparent;
+}
+
+.opp-content {
+    padding: 24px 24px 16px 24px;
+    flex-grow: 1;
+}
+
+/* Header */
+.opp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    gap: 16px;
+}
+
+.opp-title h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1c1c1c;
+    margin: 0 0 6px 0;
+    line-height: 1.3;
+}
+
+.opp-company {
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: 500;
+}
+
+.opp-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    border: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Meta Info (Icon Rows) */
+.opp-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.opp-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.opp-meta-item .material-icons-round {
+    font-size: 18px;
+    color: #888;
+}
+
+/* Chips */
+.opp-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.opp-chip {
+    background: #f5f5f5;
+    color: #5f6368;
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* Prizes / Badges */
+.opp-badge-prize {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: linear-gradient(135deg, #e0f7fa 0%, #e1bee7 100%);
+    color: #0d47a1;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-top: 12px;
+}
+
+/* Footer (Bottom bar) */
+.opp-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fafafa;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.opp-time {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    color: #d93025;
+    /* Urgent color default */
+}
+
+.opp-time.safe {
+    color: #137333;
+}
+
+.opp-share {
+    display: flex;
+    gap: 12px;
+}
+
+.opp-icon-btn {
+    cursor: pointer;
+    color: #888;
+    transition: color 0.2s;
+}
+
+.opp-icon-btn:hover {
+    color: #1a73e8;
+}
+
+/* Apply Full Button */
+.opp-apply-btn-full {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: #1a73e8;
+    color: white;
+    text-align: center;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.opp-apply-btn-full:hover {
+    background: #1557b0;
+}

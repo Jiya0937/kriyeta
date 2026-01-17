@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal | Pathlynx</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="admin-body">
+
+    <div class="admin-layout">
+
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <span class="material-icons-round">terminal</span>
+                <span>Path<span class="highlight-white">lynx</span></span>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="#" class="menu-item active">
+                    <span class="material-icons-round">dashboard</span>
+                    Dashboard
+                </a>
+                <a href="admin-placements.html" class="menu-item">
+                    <span class="material-icons-round">business_center</span>
+                    Placements
+                </a>
+                <a href="admin-students.html" class="menu-item">
+                    <span class="material-icons-round">people</span>
+                    Students
+                </a>
+                <a href="admin-internships.html" class="menu-item">
+                    <span class="material-icons-round">work_outline</span>
+                    Internships
+                </a>
+                <a href="admin-hackathons.html" class="menu-item">
+                    <span class="material-icons-round">code</span>
+                    Hackathons
+                </a>
+                <a href="#" class="menu-item">
+                    <span class="material-icons-round">campaign</span>
+                    Notifications
+                </a>
+                <a href="admin-learning.html" class="menu-item">
+                    <span class="material-icons-round">insights</span>
+                    Analytics
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="admin-login.html" class="menu-item logout" onclick="localStorage.removeItem('Admin')">
+                    <span class="material-icons-round">logout</span>
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+
+            <!-- Topbar -->
+            <!-- Topbar -->
+            <header class="admin-header">
+                <h2>Overview</h2>
+                <div class="header-actions">
+                    <button class="btn-primary-sm icon-text-btn" onclick="openProfileModal()">
+                        <span class="material-icons-round">edit</span>
+                        Edit Profile
+                    </button>
+                    <div class="admin-profile">
+                        <div class="admin-avatar-sm" id="top-admin-photo"></div>
+                        <span id="top-admin-name">Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Profile Edit ModalOverlay -->
+            <div id="profile-modal" class="modal-overlay"
+                style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
+                <div class="modal-card"
+                    style="background:white; padding:2rem; border-radius:12px; width:400px; max-width:90%;">
+                    <h3>Update Profile</h3>
+
+                    <div style="text-align:center; margin:1rem 0;">
+                        <input type="file" id="admin-photo-input" hidden accept="image/*">
+                        <div id="modal-photo-preview"
+                            style="width:80px; height:80px; border-radius:50%; background:#eee; margin:auto; background-size:cover; cursor:pointer;"
+                            onclick="document.getElementById('admin-photo-input').click()"></div>
+                        <small style="color:#666; display:block; margin-top:0.5rem;">Click to change photo</small>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" id="edit-name">
+                    </div>
+                    <div class="input-group">
+                        <label>Mobile Number</label>
+                        <input type="text" id="edit-mobile">
+                    </div>
+                    <div class="input-group">
+                        <label>Department</label>
+                        <input type="text" id="edit-dept">
+                    </div>
+
+                    <div style="display:flex; justify-content:flex-end; gap:1rem; margin-top:1.5rem;">
+                        <button class="btn-outline-sm" onclick="closeProfileModal()">Cancel</button>
+                        <button class="btn-primary-sm" onclick="saveProfileChanges()">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                // Auth Check & Init
+                const adminData = JSON.parse(localStorage.getItem("Admin"));
+                if (!adminData || adminData.role !== "admin") {
+                    window.location.href = "admin-login.html";
+                }
+
+                // Render Header
+                document.getElementById("top-admin-name").textContent = adminData.fullName || "Admin";
+
+                function updatePhotoUI(path) {
+                    const url = path ? `http://localhost:5000/${path.replace(/\\/g, "/")}` : 'assets/avatar-placeholder.png';
+                    document.getElementById("top-admin-photo").style.backgroundImage = `url('${url}')`;
+                    document.getElementById("top-admin-photo").style.backgroundSize = "cover";
+                    document.getElementById("modal-photo-preview").style.backgroundImage = `url('${url}')`;
+                }
+                updatePhotoUI(adminData.photo);
+
+                // Modal Logic
+                const modal = document.getElementById("profile-modal");
+                function openProfileModal() {
+                    document.getElementById("edit-name").value = adminData.fullName;
+                    document.getElementById("edit-mobile").value = adminData.mobileNumber;
+                    document.getElementById("edit-dept").value = adminData.department;
+                    modal.style.display = "flex";
+                }
+                function closeProfileModal() {
+                    modal.style.display = "none";
+                }
+
+                // Photo Upload
+                document.getElementById("admin-photo-input").addEventListener("change", async (e) => {
+                    if (!e.target.files[0]) return;
+
+                    const formData = new FormData();
+                    formData.append("photo", e.target.files[0]);
+
+                    try {
+                        const res = await fetch(`http://localhost:5000/api/admin/profile/upload-photo/${adminData._id}`, {
+                            method: "POST",
+                            body: formData
+                        });
+                        const data = await res.json();
+                        if (res.ok) {
+                            adminData.photo = data.path;
+                            localStorage.setItem("Admin", JSON.stringify(adminData));
+                            updatePhotoUI(data.path);
+                            alert("Photo updated!");
+                        }
+                    } catch (err) {
+                        alert("Photo upload failed");
+                    }
+                });
+
+                // Save Text Changes
+                async function saveProfileChanges() {
+                    const updates = {
+                        fullName: document.getElementById("edit-name").value,
+                        mobileNumber: document.getElementById("edit-mobile").value,
+                        department: document.getElementById("edit-dept").value
+                    };
+
+                    try {
+                        const res = await fetch(`http://localhost:5000/api/admin/profile/update/${adminData._id}`, {
+                            method: "PUT",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(updates)
+                        });
+                        const data = await res.json();
+                        if (res.ok) {
+                            // Update local storage
+                            Object.assign(adminData, updates);
+                            localStorage.setItem("Admin", JSON.stringify(adminData));
+
+                            document.getElementById("top-admin-name").textContent = adminData.fullName;
+                            alert("Profile updated successfully!");
+                            closeProfileModal();
+                        } else {
+                            alert(data.message);
+                        }
+                    } catch (err) {
+                        alert("Update failed");
+                    }
+                }
+            </script>
+
+            <!-- Stats Row -->
+            <div class="admin-stats-grid">
+                <div class="stat-card-admin">
+                    <div class="stat-value">85%</div>
+                    <div class="stat-label">Placement Rate</div>
+                    <div class="stat-trend positive">+5% vs last year</div>
+                </div>
+                <div class="stat-card-admin">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Active Drives</div>
+                    <div class="stat-trend">Ongoing</div>
+                </div>
+                <div class="stat-card-admin">
+                    <div class="stat-value">450</div>
+                    <div class="stat-label">Students Placed</div>
+                    <div class="stat-trend positive">Total this season</div>
+                </div>
+                <div class="stat-card-admin">
+                    <div class="stat-value">28</div>
+                    <div class="stat-label">Pending Verifications</div>
+                    <div class="stat-trend urgent">Action required</div>
+                </div>
+            </div>
+
+            <!-- Student Search Section (New) -->
+            <section class="admin-section">
+                <div class="section-header-admin">
+                    <h3>Find Student</h3>
+                </div>
+                <div
+                    style="display:flex; gap:1rem; background:white; padding:1.5rem; border-radius:8px; border:1px solid #eee;">
+                    <input type="text" id="dash-student-enroll" placeholder="Enter Enrollment Number (e.g. CS2024001)"
+                        style="flex:1; padding:0.8rem; border:1px solid #ddd; border-radius:6px;">
+                    <button class="btn-primary" id="dash-search-btn">View Profile</button>
+                </div>
+                <p id="dash-search-error" style="color:red; margin-top:0.5rem; display:none;"></p>
+            </section>
+
+            <script>
+                document.getElementById('dash-search-btn').addEventListener('click', async () => {
+                    const enroll = document.getElementById('dash-student-enroll').value.trim();
+                    const btn = document.getElementById('dash-search-btn');
+                    const errorMsg = document.getElementById('dash-search-error');
+
+                    if (!enroll) return;
+
+                    btn.disabled = true;
+                    btn.innerHTML = 'Searching...';
+                    errorMsg.style.display = 'none';
+
+                    try {
+                        const res = await fetch(`http://localhost:5000/api/admin/student/${enroll}`);
+                        if (res.ok) {
+                            window.location.href = `admin-student-profile.html?enrollment=${enroll}`;
+                        } else {
+                            errorMsg.textContent = "No student found with this enrollment number.";
+                            errorMsg.style.display = "block";
+                            btn.disabled = false;
+                            btn.innerHTML = 'View Profile';
+                        }
+                    } catch (err) {
+                        errorMsg.textContent = "Server error. Please try again.";
+                        errorMsg.style.display = "block";
+                        btn.disabled = false;
+                        btn.innerHTML = 'View Profile';
+                    }
+                });
+            </script>
+
+            <!-- Active Drives Table -->
+            <section class="admin-section">
+                <div class="section-header-admin">
+                    <h3>Active Placement Drives</h3>
+                    <div class="table-actions">
+                        <div class="search-box">
+                            <span class="material-icons-round">search</span>
+                            <input type="text" placeholder="Search companies...">
+                        </div>
+                        <button class="btn-icon-outline"><span class="material-icons-round">filter_list</span></button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Company</th>
+                                <th>Role</th>
+                                <th>Eligibility</th>
+                                <th>Deadline</th>
+                                <th>Applicants</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="company-cell">
+                                        <div class="company-logo-sm google-logo">G</div>
+                                        <span>Google</span>
+                                    </div>
+                                </td>
+                                <td>SDE Intern</td>
+                                <td><span class="tag">CS/IT</span> <span class="tag">CGPA > 8.0</span></td>
+                                <td>Jan 10, 2026</td>
+                                <td>142</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>
+                                    <button class="action-btn"><span class="material-icons-round">edit</span></button>
+                                    <button class="action-btn"><span
+                                            class="material-icons-round">visibility</span></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="company-cell">
+                                        <div class="company-logo-sm ms-logo">M</div>
+                                        <span>Microsoft</span>
+                                    </div>
+                                </td>
+                                <td>Data Analyst</td>
+                                <td><span class="tag">All Branches</span> <span class="tag">CGPA > 7.5</span></td>
+                                <td>Jan 12, 2026</td>
+                                <td>98</td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>
+                                    <button class="action-btn"><span class="material-icons-round">edit</span></button>
+                                    <button class="action-btn"><span
+                                            class="material-icons-round">visibility</span></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="company-cell">
+                                        <div class="company-logo-sm amazon-logo">A</div>
+                                        <span>Amazon</span>
+                                    </div>
+                                </td>
+                                <td>S DE-1</td>
+                                <td><span class="tag">CS/IT/ECE</span> <span class="tag">CGPA > 7.0</span></td>
+                                <td>Jan 02, 2026</td>
+                                <td>210</td>
+                                <td><span class="status-badge closed">Closed</span></td>
+                                <td>
+                                    <button class="action-btn"><span class="material-icons-round">edit</span></button>
+                                    <button class="action-btn"><span
+                                            class="material-icons-round">visibility</span></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Notifications & Quick Broadcast -->
+            <section class="admin-section">
+                <div class="section-header-admin">
+                    <h3>Send Notification</h3>
+                </div>
+                <div class="broadcast-box">
+                    <input type="text" placeholder="Title (e.g. Interview Schedule Update)" class="broadcast-input">
+                    <textarea placeholder="Message content..." rows="2" class="broadcast-input"></textarea>
+                    <div class="broadcast-actions">
+                        <select class="broadcast-select">
+                            <option>All Students</option>
+                            <option>Placed Students</option>
+                            <option>Unplaced Students</option>
+                        </select>
+                        <button class="btn-primary-sm">Send Alert</button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+</body>
+
+</html>

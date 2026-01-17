@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | Pathlynx</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Specific Settings Styles */
+        .settings-container {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 2rem auto;
+            align-items: start;
+        }
+
+        /* Settings Sidebar */
+        .settings-menu {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .settings-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .settings-link:hover {
+            background: var(--brand-light);
+            color: var(--brand-blue);
+        }
+
+        .settings-link.active {
+            background: var(--brand-light);
+            color: var(--brand-blue);
+            border-left-color: var(--brand-blue);
+        }
+
+        /* Settings Content */
+        .settings-panel {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .settings-panel.active {
+            display: block;
+        }
+
+        .settings-header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .section-group {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Toggles */
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--brand-light);
+        }
+
+        .toggle-row:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-label {
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .toggle-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--brand-blue);
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px var(--brand-blue);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Form Inputs */
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: inherit;
+            margin-bottom: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--brand-blue);
+            outline: none;
+        }
+
+        .btn-save {
+            background: var(--brand-blue);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body class="dash-v2-body">
+
+    <!-- Sidebar (Shared Structure) -->
+    <aside class="sidebar-v2" id="sidebar">
+        <div class="sidebar-brand">
+            <span class="material-icons-round">terminal</span>
+            <span>Path<span class="highlight">lynx</span></span>
+        </div>
+        <div class="sidebar-scroll">
+            <div class="nav-group-title">Main Menu</div>
+            <a href="dashboard.html" class="nav-item-v2">
+                <span class="material-icons-round">dashboard</span> Dashboard
+            </a>
+            <!-- Links will be injected/Active state handled by JS -->
+            <a href="settings.html" class="nav-item-v2 active">
+                <span class="material-icons-round">settings</span> Settings
+            </a>
+        </div>
+        <div class="sidebar-footer">
+            <button class="menu-item logout" onclick="Auth.logout()"
+                style="width: 100%; border:none; background:none; cursor:pointer;">
+                <span class="material-icons-round">logout</span> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content-v2">
+        <!-- Topbar -->
+        <header class="topbar-v2">
+            <div>
+                <button class="toggle-menu" onclick="toggleSidebar()"><span
+                        class="material-icons-round">menu</span></button>
+                <span style="font-weight:600; font-size:1.1rem; margin-left:1rem;">Settings</span>
+            </div>
+            <div class="topbar-actions">
+                <div class="profile-dropdown-btn">
+                    <span class="name-text user-name-display">User</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-scroll">
+            <div class="settings-container">
+
+                <!-- 1. Settings Menu (Left) -->
+                <div class="settings-menu" id="settings-menu-list">
+                    <!-- Javascript will populate this based on Role -->
+                    <div style="padding:1rem;">Loading menu...</div>
+                </div>
+
+                <!-- 2. Settings Content (Right) -->
+                <div id="settings-content-area">
+                    <!-- Panels will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="db.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // --- 1. SETTINGS CONFIGURATION ---
+        const studentMenu = [
+            { id: 'account', icon: 'manage_accounts', label: 'Account Settings' },
+            { id: 'privacy', icon: 'lock', label: 'Privacy & Visibility' },
+            { id: 'notifications', icon: 'notifications', label: 'Notifications' },
+            { id: 'learning', icon: 'menu_book', label: 'Learning Preferences' },
+            { id: 'appearance', icon: 'palette', label: 'Appearance' },
+            { id: 'data', icon: 'history', label: 'Data & Activity' }
+        ];
+
+        const adminMenu = [
+            { id: 'admin-role', icon: 'admin_panel_settings', label: 'Role & Access' },
+            { id: 'admin-monitor', icon: 'visibility', label: 'Monitoring Rules' },
+            { id: 'admin-approval', icon: 'approval', label: 'Opportunity Approval' },
+            { id: 'admin-system', icon: 'dns', label: 'System Preferences' }
+        ];
+
+        // --- 2. RENDER FUNCTIONS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            let user = Auth.getUser();
+
+            // FALLBACK: If new Auth session is missing but old 'studentName' exists (from onboarding)
+            if (!user) {
+                const legacyName = localStorage.getItem('studentName');
+                if (legacyName) {
+                    console.log("Migrating legacy session to new Auth system...");
+                    const dummySession = {
+                        uid: 'student_' + Date.now(),
+                        name: legacyName,
+                        role: 'student',
+                        email: 'student@example.com',
+                        department: localStorage.getItem('dept') || 'CS',
+                        domain: localStorage.getItem('preferredDomain') || 'General'
+                    };
+                    localStorage.setItem('pathlynx_session', JSON.stringify(dummySession));
+                    user = dummySession; // Continue with this user
+                } else {
+                    // Real auth failure
+                    console.warn("No valid session found. Redirecting to login.");
+                    window.location.href = 'index.html';
+                    return;
+                }
+            }
+
+            // Update Name
+            document.querySelectorAll('.user-name-display').forEach(el => el.textContent = user.name);
+
+            // Render Sidebar
+            const menuList = document.getElementById('settings-menu-list');
+            const contentArea = document.getElementById('settings-content-area');
+            const items = user.role === 'admin' ? adminMenu : studentMenu;
+
+            menuList.innerHTML = '';
+            contentArea.innerHTML = '';
+
+            items.forEach((item, index) => {
+                // Menu Link
+                const link = document.createElement('div');
+                link.className = `settings-link ${index === 0 ? 'active' : ''}`;
+                link.dataset.target = item.id;
+                link.innerHTML = `<span class="material-icons-round">${item.icon}</span> ${item.label}`;
+                link.onclick = () => switchSettingsTab(item.id);
+                menuList.appendChild(link);
+
+                // Content Panel (Placeholder generation based on ID)
+                const panel = document.createElement('div');
+                panel.className = `settings-panel ${index === 0 ? 'active' : ''}`;
+                panel.id = item.id;
+                panel.innerHTML = generatePanelContent(item.id, user); // Helper to generate specific HTML
+                contentArea.appendChild(panel);
+            });
+        });
+
+        function switchSettingsTab(targetId) {
+            // Update Menu
+            document.querySelectorAll('.settings-link').forEach(l => l.classList.remove('active'));
+            document.querySelector(`.settings-link[data-target="${targetId}"]`).classList.add('active');
+
+            // Update Panel
+            document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(targetId).classList.add('active');
+        }
+
+        // --- 3. PANEL CONTENT GENERATOR ---
+        function generatePanelContent(id, user) {
+            let html = `<div class="settings-header"><h2>${document.querySelector(`[data-target="${id}"]`).textContent.trim()}</h2></div>`;
+
+            if (id === 'account') {
+                html += `
+                    <div class="section-group">
+                        <label class="section-title">Email Address</label>
+                        <input type="email" class="form-control" value="${user.email || ''}" readonly style="background:#f5f5f5;">
+                        <p class="toggle-desc" style="margin-bottom:1rem;">Contact your faculty admin to update email.</p>
+                    </div>
+                    <div class="section-group">
+                        <label class="section-title">Change Password</label>
+                        <input type="password" class="form-control" placeholder="Current Password">
+                        <input type="password" class="form-control" placeholder="New Password">
+                        <button class="btn-save">Update Password</button>
+                    </div>
+                `;
+            }
+            else if (id === 'privacy') {
+                html += `
+                    <p style="margin-bottom:1.5rem; color:#d93025; background:#fce8e6; padding:1rem; border-radius:8px; font-size:0.9rem;">
+                        <span class="material-icons-round" style="font-size:1rem; vertical-align:middle;">info</span>
+                        Note: As a department platform, you cannot hide your profile completely from faculty.
+                    </p>
+                    ${createToggle('Show GitHub to Faculty', 'Allow faculty to view your connected GitHub repositories.', true)}
+                    ${createToggle('Show LinkedIn to Faculty', 'Allow faculty to view your professional network.', true)}
+                    ${createToggle('Allow Faculty Feedback', 'Receive performance feedback visible on your profile.', true)}
+                `;
+            }
+            else if (id === 'notifications') {
+                html += `
+                    ${createToggle('Internship Alerts', 'Get notified about new internship opportunities.', true)}
+                    ${createToggle('Placement Drives', 'Critical alerts for campus placement drives.', true)}
+                    ${createToggle('Daily Task Reminders', 'Morning reminder for your daily challenge.', true)}
+                    ${createToggle('Faculty Messages', 'Direct messages from department admins.', true)}
+                `;
+            }
+            else if (id === 'learning') {
+                html += `
+                     <div class="section-group">
+                        <label class="section-title">Preferred Domain</label>
+                        <select class="form-control" onchange="localStorage.setItem('preferredDomain', this.value)">
+                            <option ${localStorage.getItem('preferredDomain') == 'Web Development' ? 'selected' : ''}>Web Development</option>
+                            <option ${localStorage.getItem('preferredDomain') == 'Data Science' ? 'selected' : ''}>Data Science</option>
+                            <option ${localStorage.getItem('preferredDomain') == 'AI & ML' ? 'selected' : ''}>AI & Machine Learning</option>
+                            <option ${localStorage.getItem('preferredDomain') == 'Cybersecurity' ? 'selected' : ''}>Cybersecurity</option>
+                        </select>
+                    </div>
+                    <div class="section-group">
+                        <label class="section-title">Daily Goal</label>
+                         <select class="form-control">
+                            <option>30 Minutes / Day</option>
+                            <option selected>1 Hour / Day</option>
+                            <option>2 Hours / Day</option>
+                        </select>
+                    </div>
+                `;
+            }
+            else if (id === 'data') {
+                html += `
+                    <div style="background:#f8fafc; padding:1.5rem; border-radius:8px;">
+                        <div class="toggle-row">
+                            <div><div class="toggle-label">Account Created</div></div>
+                            <div>Jan 2, 2026</div>
+                        </div>
+                         <div class="toggle-row">
+                            <div><div class="toggle-label">Last Login</div></div>
+                            <div>Just Now</div>
+                        </div>
+                        <div class="toggle-row">
+                            <div><div class="toggle-label">Login Device</div></div>
+                            <div>Windows PC (Chrome)</div>
+                        </div>
+                    </div>
+                `;
+            }
+            // --- ADMIN PANELS ---
+            else if (id === 'admin-approval') {
+                html += `
+                     ${createToggle('Internship Auto-Publish', 'Automatically publish internships from trusted partners.', false)}
+                     ${createToggle('Require Faculty Approval', 'All student posts require approval before going live.', true)}
+                     ${createToggle('Validate External Links', 'Check if application links are active.', true)}
+                `;
+            }
+            else if (id === 'admin-monitor') {
+                html += `
+                    <div class="section-group">
+                        <label class="section-title">Inactivity Threshold</label>
+                         <select class="form-control">
+                            <option>3 Days</option>
+                            <option selected>7 Days</option>
+                            <option>14 Days</option>
+                        </select>
+                        <p class="toggle-desc">Students inactive for this period will be flagged.</p>
+                    </div>
+                     ${createToggle('Auto-Flag Inactive Students', 'Highlight students with low engagement in dashboard.', true)}
+                `;
+            }
+            else {
+                html += `<p>Settings for ${id} coming soon.</p>`;
+            }
+
+            return html;
+        }
+
+        function createToggle(label, desc, checked) {
+            return `
+                <div class="toggle-row">
+                    <div>
+                        <div class="toggle-label">${label}</div>
+                        <div class="toggle-desc">${desc}</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" ${checked ? 'checked' : ''}>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            `;
+        }
+    </script>
+</body>
+
+</html>

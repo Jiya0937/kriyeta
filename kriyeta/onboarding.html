@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile Setup | Pathlynx</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+</head>
+
+<body class="onboarding-body">
+
+    <div class="onboarding-container">
+        <!-- Progress Header -->
+        <header class="form-header">
+            <div class="header-content">
+                <h2>Create Your Profile</h2>
+                <span class="step-indicator">Step <span id="current-step-num">1</span> of 5</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progress-bar"></div>
+            </div>
+        </header>
+
+        <!-- Form Container -->
+        <form id="onboarding-form" class="multi-step-form">
+
+            <!-- Step 1: Personal Details -->
+            <div class="form-step active" data-step="1">
+                <h3>Let's get to know you</h3>
+                <p class="step-desc">Start with your basic academic details.</p>
+
+                <div class="profile-upload-center">
+                    <div class="avatar-preview" id="avatar-preview">
+                        <span class="material-icons-round">add_a_photo</span>
+                    </div>
+                    <label for="profile-photo" class="upload-label">Upload Photo</label>
+                    <input type="file" id="profile-photo" name="photo" accept="image/*" hidden>
+                </div>
+
+                <div class="input-group">
+                    <label for="full-name">Full Name</label>
+                    <input type="text" id="full-name" name="fullName" placeholder="Student Name" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="college-name">College Name</label>
+                    <input type="text" id="college-name" name="college" placeholder="College Name" required>
+                </div>
+
+                <div class="row-inputs">
+                    <div class="input-group">
+                        <label for="scholar-no">Scholar No.</label>
+                        <input type="text" id="scholar-no" name="scholarNo" placeholder="Scholar No" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="enrollment-no">Enrollment No.</label>
+                        <input type="text" id="enrollment-no" name="enrollmentNo" placeholder="Enrollment No" required>
+                    </div>
+                </div>
+
+                <div class="row-inputs">
+                    <div class="input-group">
+                        <label for="branch">Branch</label>
+                        <select id="branch" name="branch" required>
+                            <option value="" disabled selected>Select Branch</option>
+                            <option value="CSE">Computer Science</option>
+                            <option value="AIML">Artificial Intelligence</option>
+                            <option value="DS">Data Science</option>
+                            <option value="IT">Information Technology</option>
+                            <option value="ECE">Electronics & Comm.</option>
+                            <option value="ME">Mechanical</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="year">Year</label>
+                        <select id="year" name="year" required>
+                            <option value="" disabled selected>Select Year</option>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Skills & Tech -->
+            <div class="form-step" data-step="2">
+                <h3>Skills & Expertise</h3>
+                <p class="step-desc">Highlight what you're good at.</p>
+
+                <div class="input-group">
+                    <label for="skills">Technical Skills (Comma separated)</label>
+                    <textarea id="skills" name="skills" rows="3"
+                        placeholder="e.g. Java, Python, React, SQL..."></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label for="projects">Projects</label>
+                    <textarea id="projects" name="projects" rows="3"
+                        placeholder="e.g. E-commerce Website, Chat App..."></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label for="certifications">Certifications</label>
+                    <textarea id="certifications" name="certifications" rows="3"
+                        placeholder="e.g. AWS Certified Cloud Practitioner..."></textarea>
+                </div>
+            </div>
+
+            <!-- Step 3: Projects & Socials -->
+            <div class="form-step" data-step="3">
+                <h3>Portfolio & Links</h3>
+                <p class="step-desc">Showcase your work and professional presence.</p>
+
+                <div class="input-group icon-input">
+                    <span class="material-icons-round input-icon">link</span>
+                    <input type="url" id="linkedin" name="linkedin" placeholder="LinkedIn Profile URL">
+                </div>
+
+                <div class="input-group icon-input">
+                    <span class="material-icons-round input-icon">code</span>
+                    <input type="url" id="github" name="github" placeholder="GitHub Profile URL">
+                </div>
+
+                <div class="file-drop-area" id="resume-drop">
+                    <span class="material-icons-round">description</span>
+                    <p>Upload Resume (PDF)</p>
+                    <span class="file-name" id="resume-name"></span>
+                    <input type="file" id="resume-upload" name="resume" accept=".pdf" hidden>
+                    <button type="button" class="btn-outline-sm"
+                        onclick="document.getElementById('resume-upload').click()">Browse</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Review & Submit -->
+            <div class="form-step" data-step="4">
+                <div class="success-anim">
+                    <span class="material-icons-round">check_circle</span>
+                </div>
+                <h3>Almost Done!</h3>
+                <p class="step-desc">Please review your details before submitting.</p>
+
+                <div class="review-box">
+                    <p><strong>Name:</strong> <span id="review-name">-</span></p>
+                    <p><strong>College:</strong> <span id="review-college">-</span></p>
+                    <p><strong>Skills:</strong> <span id="review-skills">-</span></p>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">I agree to the terms and privacy policy.</label>
+                </div>
+            </div>
+
+            <!-- Step 5: Account Setup -->
+            <div class="form-step" data-step="5">
+                <h3>Account Security</h3>
+                <p class="step-desc">Create your login credentials.</p>
+
+                <div class="input-group">
+                    <label for="create-email">College Email / Username</label>
+                    <input type="email" id="create-email" name="email" placeholder="Student Name/ Student Email"
+                        required>
+                </div>
+
+                <div class="input-group">
+                    <label for="create-password">Create Password</label>
+                    <input type="password" id="create-password" name="password" placeholder="Min. 8 characters"
+                        required>
+                </div>
+
+                <div class="input-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" placeholder="Re-enter password" required>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" id="prev-btn" style="display: none;">Back</button>
+                <button type="button" class="btn-primary" id="next-btn">Next Step</button>
+                <button type="submit" class="btn-primary" id="submit-btn" style="display: none;">Create Pathlynx
+                    Account</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="onboarding.js"></script>
+</body>
+
+</html>

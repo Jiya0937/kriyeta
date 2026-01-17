@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Students | Admin Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .search-bar-lg {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-bar-lg input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .student-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .student-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid #eee;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .student-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary-color);
+        }
+
+        .student-avatar-lg {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            margin: 0 auto 1rem;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .st-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 0.2rem;
+        }
+
+        .st-enroll {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            background: #f5f7fa;
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+        }
+
+        .st-details {
+            font-size: 0.9rem;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body class="admin-body">
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <span class="material-icons-round">terminal</span>
+                <span>Path<span class="highlight-white">lynx</span></span>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="admin-dashboard.html" class="menu-item"><span
+                        class="material-icons-round">dashboard</span>Dashboard</a>
+                <a href="admin-students.html" class="menu-item active"><span
+                        class="material-icons-round">people</span>Students</a>
+                <a href="admin-internships.html" class="menu-item"><span
+                        class="material-icons-round">work_outline</span>Internships</a>
+                <a href="admin-hackathons.html" class="menu-item"><span
+                        class="material-icons-round">code</span>Hackathons</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="admin-login.html" class="menu-item logout" onclick="localStorage.removeItem('Admin')"><span
+                        class="material-icons-round">logout</span>Logout</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <header class="admin-header">
+                <h2>Student Directory</h2>
+                <div class="header-actions">
+                    <div class="admin-profile">
+                        <span class="material-icons-round">account_circle</span>
+                        <span>Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Search Section -->
+            <div class="search-bar-lg">
+                <input type="text" id="enrollment-search" placeholder="Enter Enrollment Number to Search...">
+                <button class="btn-primary" id="search-btn">Search Student</button>
+            </div>
+
+            <!-- Results Grid -->
+            <div id="students-container" class="student-grid">
+                <!-- Students injected here -->
+                <div style="grid-column: 1/-1; text-align:center; padding: 2rem; color:#888;">Loading students...</div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Check Admin Auth
+            if (!localStorage.getItem("Admin")) {
+                window.location.href = "admin-login.html";
+                return;
+            }
+
+            const container = document.getElementById("students-container");
+            const searchInput = document.getElementById("enrollment-search");
+            const searchBtn = document.getElementById("search-btn");
+
+            // Fetch All Students
+            async function fetchAllStudents() {
+                try {
+                    const res = await fetch("http://localhost:5000/api/admin/students");
+                    const students = await res.json();
+                    renderStudents(students);
+                } catch (err) {
+                    container.innerHTML = `<p style="color:red">Error loading data: ${err.message}</p>`;
+                }
+            }
+
+            // Search Student
+            async function searchStudent() {
+                const term = searchInput.value.trim();
+                if (!term) {
+                    fetchAllStudents();
+                    return;
+                }
+
+                container.innerHTML = '<p>Searching...</p>';
+                try {
+                    const res = await fetch(`http://localhost:5000/api/admin/student/${term}`);
+                    if (res.ok) {
+                        // Redirect if found
+                        window.location.href = `admin-student-profile.html?enrollment=${term}`;
+                    } else {
+                        container.innerHTML = `<div style="grid-column:1/-1; text-align:center;">
+                            <h3>Student Not Found</h3>
+                            <p>No student found with enrollment number: <b>${term}</b></p>
+                            <button onclick="location.reload()" class="btn-outline-sm" style="margin-top:1rem; cursor:pointer;">Clear Search</button>
+                        </div>`;
+                    }
+                } catch (err) {
+                    container.innerHTML = `<p style="color:red">Search error: ${err.message}</p>`;
+                }
+            }
+
+            function renderStudents(list) {
+                if (!list.length) {
+                    container.innerHTML = '<p style="grid-column:1/-1; text-align:center;">No students found.</p>';
+                    return;
+                }
+
+                container.innerHTML = list.map(st => {
+                    const photoUrl = st.photo ? `http://localhost:5000/${st.photo.replace(/\\/g, "/")}` : 'assets/students.png';
+                    return `
+                        <div class="student-card" onclick="viewProfile('${st.enrollmentNo}')">
+                            <div class="student-avatar-lg" style="background-image: url('${photoUrl}')"></div>
+                            <div class="st-name">${st.fullName}</div>
+                            <div class="st-enroll">${st.enrollmentNo}</div>
+                            <div class="st-details">${st.branch || '-'} • ${st.year || '-'} Year</div>
+                        </div>
+                    `;
+                }).join("");
+            }
+
+            searchBtn.addEventListener("click", searchStudent);
+
+            // Allow Enter key
+            searchInput.addEventListener("keypress", (e) => {
+                if (e.key === "Enter") searchStudent();
+            });
+
+            // Initial Load
+            fetchAllStudents();
+        });
+
+        function viewProfile(enrollmentNo) {
+            window.location.href = `admin-student-profile.html?enrollment=${enrollmentNo}`;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Hackathons | Admin Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="admin-body">
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <span class="material-icons-round">terminal</span>
+                <span>Path<span class="highlight-white">lynx</span></span>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="admin-dashboard.html" class="menu-item"><span
+                        class="material-icons-round">dashboard</span>Dashboard</a>
+                <a href="admin-placements.html" class="menu-item"><span
+                        class="material-icons-round">business_center</span>Placements</a>
+                <a href="admin-internships.html" class="menu-item"><span
+                        class="material-icons-round">work_outline</span>Internships</a>
+                <a href="admin-hackathons.html" class="menu-item active"><span
+                        class="material-icons-round">code</span>Hackathons</a>
+                <a href="admin-students.html" class="menu-item"><span
+                        class="material-icons-round">people</span>Students</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="admin-login.html" class="menu-item logout" onclick="localStorage.removeItem('Admin')"><span
+                        class="material-icons-round">logout</span>Logout</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <header class="admin-header-modern">
+                <h2>Hackathons</h2>
+                <button class="btn-add-new" onclick="openModal()">
+                    <span class="material-icons-round">add_circle</span> Add Hackathon
+                </button>
+            </header>
+
+            <!-- Stats -->
+            <div class="admin-stats-modern">
+                <div class="stat-card-v2">
+                    <div class="stat-icon-wrapper icon-blue">
+                        <span class="material-icons-round">event</span>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="stats-total">0</h3>
+                        <p>Total Posted</p>
+                    </div>
+                </div>
+                <div class="stat-card-v2">
+                    <div class="stat-icon-wrapper icon-green">
+                        <span class="material-icons-round">event_available</span>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="stats-active">0</h3>
+                        <p>Upcoming</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- List -->
+            <div id="hackathons-list" class="admin-grid-container" style="margin-top: 2rem;">
+                <!-- Injected via JS -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Create Modal -->
+    <div id="create-modal" class="modal"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
+        <div class="modal-content"
+            style="background:white; width:600px; max-width:90%; max-height:90vh; overflow-y:auto; border-radius:12px; padding:2rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                <h3>Add New Hackathon</h3>
+                <span class="material-icons-round" onclick="closeModal()"
+                    style="cursor:pointer; color:#999;">close</span>
+            </div>
+
+            <form id="create-form">
+                <div class="form-grid"
+                    style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                    <div class="input-group">
+                        <label>Hackathon Name</label>
+                        <input type="text" id="h-name" required placeholder="HackMIT 2026">
+                    </div>
+                    <div class="input-group">
+                        <label>Organizer</label>
+                        <input type="text" id="h-organizer" required placeholder="MIT / Devfolio">
+                    </div>
+                </div>
+
+                <div class="form-grid"
+                    style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                    <div class="input-group">
+                        <label>Mode</label>
+                        <select id="h-mode" required
+                            style="width:100%; padding:0.75rem; border:1px solid #ddd; border-radius:8px;">
+                            <option>Online</option>
+                            <option>Offline</option>
+                            <option>Hybrid</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Location (if Offline)</label>
+                        <input type="text" id="h-location" placeholder="City or 'Remote'">
+                    </div>
+                </div>
+
+                <div class="form-grid"
+                    style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                    <div class="input-group">
+                        <label>Event Dates</label>
+                        <input type="text" id="h-dates" required placeholder="Apr 10 - Apr 12">
+                    </div>
+                    <div class="input-group">
+                        <label>Registration Deadline</label>
+                        <input type="date" id="h-deadline" required>
+                    </div>
+                </div>
+
+                <div class="input-group" style="margin-bottom:1rem;">
+                    <label>Registration Link</label>
+                    <input type="url" id="h-link" required placeholder="https://..." style="width:100%;">
+                </div>
+
+                <div class="form-grid"
+                    style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                    <div class="input-group">
+                        <label>Eligibility</label>
+                        <input type="text" id="h-eligibility" placeholder="Open to All">
+                    </div>
+                    <div class="input-group">
+                        <label>Prizes</label>
+                        <input type="text" id="h-prizes" placeholder="₹50,000 Prize Pool">
+                    </div>
+                </div>
+
+                <div class="input-group" style="margin-bottom:1.5rem;">
+                    <label>Description (Optional)</label>
+                    <textarea id="h-desc" rows="3"
+                        style="width:100%; padding:0.75rem; border:1px solid #ddd; border-radius:8px;"
+                        placeholder="Details..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary" style="width:100%;">Publish Hackathon</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Auth Check
+        if (!localStorage.getItem("Admin")) {
+            window.location.href = "admin-login.html";
+        }
+
+        const modal = document.getElementById("create-modal");
+        function openModal() { modal.style.display = "flex"; }
+        function closeModal() { modal.style.display = "none"; }
+
+        // Fetch & Render
+        async function fetchHackathons() {
+            try {
+                const res = await fetch("http://localhost:5000/api/hackathons");
+                const data = await res.json();
+                renderList(data);
+                updateStats(data);
+            } catch (err) {
+                console.error(err);
+                alert("Failed to load hackathons");
+            }
+        }
+
+        function renderList(list) {
+            const container = document.getElementById("hackathons-list");
+            if (list.length === 0) {
+                container.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:3rem; color:#888;">No hackathons posted yet. Click "Add Hackathon" to start.</div>';
+                return;
+            }
+
+            container.innerHTML = list.map(item => {
+                let statusClass = 'status-active';
+                if (item.status === 'Closed') statusClass = 'status-closed';
+
+                const deadlineDate = new Date(item.registrationDeadline);
+                const today = new Date();
+                const diffTime = deadlineDate - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                let deadlineStyle = '';
+                let deadlineText = deadlineDate.toLocaleDateString();
+
+                if (diffDays < 0) {
+                    deadlineText = 'Expired';
+                    deadlineStyle = 'color:#c5221f; font-weight:700;';
+                } else if (diffDays <= 3) {
+                    deadlineText += ' (Ending)';
+                    deadlineStyle = 'color:#d93025; font-weight:700;';
+                }
+
+                const initial = item.organizer ? item.organizer.charAt(0).toUpperCase() : '?';
+
+                return `
+                <div class="admin-card">
+                    <div class="ac-header">
+                        <div class="ac-company">
+                            <div class="ac-logo" style="background:#e8f0fe; color:#1a73e8;">${initial}</div>
+                            <span class="ac-name">${item.organizer}</span>
+                        </div>
+                        <span class="ac-status ${statusClass}">${item.status}</span>
+                    </div>
+                    
+                    <div class="ac-role" style="font-size:1.1rem;">${item.name}</div>
+                    
+                    <div class="ac-tags">
+                        <span class="ac-tag">${item.mode}</span>
+                        <span class="ac-tag">${item.eventDate}</span>
+                    </div>
+
+                    <div class="ac-details">
+                        <div class="ac-detail-item">
+                            <div class="ac-label">Prizes</div>
+                            <div class="ac-value">${item.prizes}</div>
+                        </div>
+                        <div class="ac-detail-item">
+                            <div class="ac-label">Register By</div>
+                            <div class="ac-value" style="${deadlineStyle}">${deadlineText}</div>
+                        </div>
+                    </div>
+
+                    <div class="ac-actions">
+                        <button class="btn-icon-soft btn-view" onclick="window.open('${item.registerLink}', '_blank')">
+                            <span class="material-icons-round" style="font-size:16px">open_in_new</span> Link
+                        </button>
+                        <button class="btn-icon-soft btn-delete" onclick="deleteHackathon('${item._id}')">
+                            <span class="material-icons-round" style="font-size:16px">delete</span> Delete
+                        </button>
+                    </div>
+                </div>
+            `}).join("");
+        }
+
+        function updateStats(list) {
+            document.getElementById("stats-total").textContent = list.length;
+            const active = list.filter(i => i.status === "Active" && new Date(i.registrationDeadline) >= new Date()).length;
+            document.getElementById("stats-active").textContent = active;
+        }
+
+        // Create
+        document.getElementById("create-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const payload = {
+                name: document.getElementById("h-name").value,
+                organizer: document.getElementById("h-organizer").value,
+                mode: document.getElementById("h-mode").value,
+                location: document.getElementById("h-location").value,
+                eventDate: document.getElementById("h-dates").value,
+                registrationDeadline: document.getElementById("h-deadline").value,
+                prizes: document.getElementById("h-prizes").value,
+                eligibility: document.getElementById("h-eligibility").value,
+                registerLink: document.getElementById("h-link").value,
+                description: document.getElementById("h-desc").value
+            };
+
+            try {
+                const res = await fetch("http://localhost:5000/api/hackathons/create", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    alert("Posted successfully!");
+                    closeModal();
+                    document.getElementById("create-form").reset();
+                    fetchHackathons();
+                } else {
+                    alert("Failed to post");
+                }
+            } catch (err) {
+                alert("Server error");
+            }
+        });
+
+        // Delete
+        async function deleteHackathon(id) {
+            if (!confirm("Are you sure you want to delete this hackathon?")) return;
+
+            try {
+                const res = await fetch(`http://localhost:5000/api/hackathons/${id}`, { method: "DELETE" });
+                if (res.ok) fetchHackathons();
+            } catch (err) {
+                alert("Delete failed");
+            }
+        }
+
+        // Init
+        fetchHackathons();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support | Pathlynx</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+</head>
+
+<body class="help-body">
+
+    <!-- Navigation -->
+    <nav class="navbar glass-nav">
+        <div class="logo">
+            <span class="material-icons-round">terminal</span>
+            <span>Path<span class="highlight">lynx</span></span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Pathlynx</a>
+            <a href="career-platform.html">Career Platform</a>
+            <a href="contact.html">Contact</a>
+            <a href="help.html" class="active-link btn-text">Help</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="help-hero">
+        <div class="hero-content fade-in-up">
+            <div class="section-badge badge-green">Support Center</div>
+            <h1>How can we assist you today?</h1>
+            <p>Find answers, troubleshoot issues, or get in touch with our team.</p>
+
+            <div class="search-bar-mockup">
+                <span class="material-icons-round">search</span>
+                <input type="text" placeholder="Search for answers (e.g., 'password reset', 'application status')...">
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="help-main">
+        <div class="help-grid">
+
+            <!-- Specific Issue Ticket Form -->
+            <div class="ticket-section slide-in-left">
+                <div class="form-card">
+                    <h3>Submit a Query</h3>
+                    <p class="form-desc">Can't find what you need? Tell us more.</p>
+
+                    <form id="help-form">
+                        <div class="input-group">
+                            <label>Full Name</label>
+                            <input type="text" placeholder="Your Name" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Email Address</label>
+                            <input type="email" placeholder="Your Email" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Issue Category</label>
+                            <select required>
+                                <option value="" disabled selected>Select an issue...</option>
+                                <option value="login">Login Problems</option>
+                                <option value="profile">Profile Creation Issue</option>
+                                <option value="application">Internship Application</option>
+                                <option value="timeline">Placement Timeline</option>
+                                <option value="bug">Report a Bug</option>
+                                <option value="other">General Platform Usage</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Description</label>
+                            <textarea rows="4" placeholder="Describe the issue in detail..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-primary btn-block">Submit Ticket</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Visual & FAQs -->
+            <div class="faq-section slide-in-right">
+
+                <div class="help-visual-wrapper">
+                    <img src="assets/help_faq.png" alt="Help Center Illustration" class="help-illustration">
+                </div>
+
+                <h3>Common Questions</h3>
+                <div class="accordion">
+                    <!-- FAQ 1 -->
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <span>How do I reset my password?</span>
+                            <span class="material-icons-round">expand_more</span>
+                        </button>
+                        <div class="accordion-body">
+                            <p>Go to the Student Login page and click on "Forgot Password". Enter your registered
+                                college email to receive a reset link.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 2 -->
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <span>How do I update my profile details?</span>
+                            <span class="material-icons-round">expand_more</span>
+                        </button>
+                        <div class="accordion-body">
+                            <p>Log in to your dashboard and click on the "Profile" icon in the navigation bar. You can
+                                edit your skills, resume, and project details there.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 3 -->
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <span>Why is my application status 'Pending'?</span>
+                            <span class="material-icons-round">expand_more</span>
+                        </button>
+                        <div class="accordion-body">
+                            <p>'Pending' means the company hasnorm viewed your application yet. Statuses are updated in
+                                real-time as recruiters take action.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 4 -->
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            <span>Who validates the internship listings?</span>
+                            <span class="material-icons-round">expand_more</span>
+                        </button>
+                        <div class="accordion-body">
+                            <p>All listings are verified by your college's Placement Cell or directly by our partner
+                                companies to ensure authenticity.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Pathlynx. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Accordion Logic
+        document.querySelectorAll('.accordion-header').forEach(button => {
+            button.addEventListener('click', () => {
+                const accordionItem = button.parentElement;
+
+                // Toggle active class
+                accordionItem.classList.toggle('active');
+
+                // Close other items
+                document.querySelectorAll('.accordion-item').forEach(item => {
+                    if (item !== accordionItem) {
+                        item.classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Form Submit Logic
+        document.getElementById('help-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const btn = this.querySelector('button');
+            const originalText = btn.textContent;
+
+            btn.textContent = 'Submitting...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert('Your support ticket has been raised! Ticket ID: #PL-8829');
+                this.reset();
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning & Roadmaps | Pathlynx</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cards.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/learning-tracker.js"></script>
+</head>
+<style>
+    /* Specific styles for Learning Dashboard */
+    .roadmap-card {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 16px;
+        padding: 24px;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        cursor: pointer;
+        height: 100%;
+    }
+
+    .roadmap-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+        border-color: var(--primary-color);
+    }
+
+    .roadmap-icon-wrapper {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #e8f0fe 0%, #d2e3fc 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+        margin-bottom: 8px;
+    }
+
+    .roadmap-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1c1c1c;
+    }
+
+    .roadmap-desc {
+        font-size: 0.9rem;
+        color: #666;
+        line-height: 1.5;
+        flex-grow: 1;
+    }
+
+    .roadmap-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85rem;
+        color: #555;
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .skill-badge {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .badge-beginner {
+        background: #e6f4ea;
+        color: #137333;
+    }
+
+    .badge-intermediate {
+        background: #fef7e0;
+        color: #b06000;
+    }
+
+    .badge-advanced {
+        background: #fce8e6;
+        color: #c5221f;
+    }
+
+    /* Detail View Styles */
+    .roadmap-detail-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding-bottom: 3rem;
+    }
+
+    .detail-header {
+        margin-bottom: 2rem;
+        background: white;
+        padding: 2rem;
+        border-radius: 16px;
+        border: 1px solid #eee;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .step-card {
+        background: white;
+        border-left: 4px solid var(--primary-color);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .step-number {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #888;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+
+    .step-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #333;
+    }
+
+    .resource-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 1rem;
+    }
+
+    .resource-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        text-decoration: none;
+        color: #333;
+        transition: background 0.2s;
+        border: 1px solid transparent;
+    }
+
+    .resource-link:hover {
+        background: #fff;
+        border-color: #ddd;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .yt-icon {
+        color: #FF0000;
+    }
+
+    .udemy-icon {
+        color: #A435F0;
+    }
+
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 1rem;
+        color: var(--primary-color);
+        cursor: pointer;
+        font-weight: 500;
+        background: none;
+        border: none;
+        padding: 0;
+    }
+</style>
+</head>
+
+<body class="dash-v2-body">
+
+    <!-- Sidebar V2 -->
+    <aside class="sidebar-v2" id="sidebar">
+        <div class="sidebar-brand">
+            <span class="material-icons-round">terminal</span>
+            <span>Path<span class="highlight">lynx</span></span>
+        </div>
+
+        <div class="sidebar-scroll">
+            <div class="nav-group-title">Main Menu</div>
+            <a href="dashboard.html" class="nav-item-v2">
+                <span class="material-icons-round">dashboard</span>
+                Dashboard
+            </a>
+            <a href="dashboard.html#section-profile" class="nav-item-v2">
+                <span class="material-icons-round">person</span>
+                My Profile
+            </a>
+            <a href="learning-dashboard.html" class="nav-item-v2 active">
+                <span class="material-icons-round">school</span>
+                Learning
+            </a>
+            <a href="dashboard.html#section-internships" class="nav-item-v2">
+                <span class="material-icons-round">work_outline</span>
+                Internships
+            </a>
+            <a href="dashboard.html#section-placements" class="nav-item-v2">
+                <span class="material-icons-round">event_note</span>
+                Placements
+            </a>
+            <a href="hackathon-dashboard.html" class="nav-item-v2">
+                <span class="material-icons-round">code</span>
+                Hackathons
+            </a>
+            <a href="dashboard.html#section-tracker" class="nav-item-v2">
+                <span class="material-icons-round">track_changes</span>
+                Application Tracker
+            </a>
+            <a href="dashboard.html#section-ai" class="nav-item-v2">
+                <span class="material-icons-round">auto_awesome</span>
+                AI Insights
+            </a>
+
+            <div class="nav-group-title">System</div>
+            <a href="dashboard.html#section-notifications" class="nav-item-v2">
+                <span class="material-icons-round">notifications</span>
+                Notifications
+            </a>
+            <a href="help.html" class="nav-item-v2">
+                <span class="material-icons-round">help_outline</span>
+                Help & Support
+            </a>
+            <a href="dashboard.html#section-settings" class="nav-item-v2">
+                <span class="material-icons-round">settings</span>
+                Settings
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="menu-item logout" onclick="logout()"
+                style="width: 100%; border:none; background:none; cursor:pointer;">
+                <span class="material-icons-round">logout</span>
+                Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content V2 -->
+    <div class="main-content-v2">
+
+        <!-- Top Bar (Shared) -->
+        <header class="topbar-v2">
+            <div style="display: flex; align-items: center;">
+                <button class="toggle-menu" onclick="toggleSidebar()">
+                    <span class="material-icons-round">menu</span>
+                </button>
+                <div class="page-title-mobile" style="margin-left: 1rem; font-weight: 600; font-size: 1.1rem;">
+                    Learning Hub
+                </div>
+            </div>
+
+            <div class="topbar-actions">
+                <button class="icon-btn-v2">
+                    <span class="material-icons-round">notifications</span>
+                    <span class="dot"></span>
+                </button>
+                <div class="profile-dropdown-btn">
+                    <div class="user-avatar" style="background-image: url('assets/students.png');"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Scroll Area -->
+        <div class="content-scroll">
+
+            <!-- Section: Learning Analytics -->
+            <section id="section-analytics" class="dash-section active" style="margin-bottom: 2rem;">
+                <div class="welcome-banner-rich" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
+                    <div class="welcome-text">
+                        <h1>Learning Dashboard</h1>
+                        <p style="color: rgba(255,255,255,0.9);">Track your progress, consistency, and skills.</p>
+                    </div>
+                    <div class="welcome-visual" style="text-align: right;">
+                        <span class="material-icons-round"
+                            style="font-size: 4rem; opacity: 0.8; color: rgba(255,255,255,0.8);">insights</span>
+                    </div>
+                </div>
+
+                <!-- 1. Summary Cards -->
+                <div class="stats-grid-v2" id="analytics-summary">
+                    <!-- Injected by JS -->
+                    <div class="stat-card-rich">Loading...</div>
+                </div>
+
+                <!-- 2. Charts Row -->
+                <div class="dashboard-grid" style="margin-top: 1.5rem; grid-template-columns: 1fr 1.5fr;">
+
+                    <!-- Progress Rings -->
+                    <div class="section-container">
+                        <h3>Domain Progress</h3>
+                        <div id="domain-progress-container"
+                            style="display:flex; flex-wrap:wrap; gap:1.5rem; justify-content:center; margin-top:1rem;">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Activity Graph -->
+                    <div class="section-container">
+                        <div class="section-header" style="padding:0; margin-bottom:1rem; border:none;">
+                            <h3>Learning Activity</h3>
+                            <select
+                                style="border:1px solid #ddd; padding:4px 8px; border-radius:6px; font-size:0.8rem;">
+                                <option>Last 7 Days</option>
+                            </select>
+                        </div>
+                        <div style="height: 250px;">
+                            <canvas id="learningActivityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Roadmap List -->
+            <section id="section-roadmap-list" class="dash-section active">
+                <div class="section-header">
+                    <div>
+                        <h2>Career Roadmaps</h2>
+                        <p style="color:#666; margin-top:0.25rem;">Curated paths to master your dream domain.</p>
+                    </div>
+                </div>
+
+                <div id="learning-grid" class="placement-grid"
+                    style="grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));">
+                    <!-- Cards injected via JS -->
+                </div>
+            </section>
+
+            <!-- Section: Roadmap Detail -->
+            <section id="section-roadmap-detail" class="dash-section" style="display: none;">
+                <!-- Content injected via JS -->
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/roadmap-data.js"></script>
+    <script src="js/learning-logic.js"></script>
+    <script>
+        // Inline script for basic sidebar toggle functionality reused from dashboard
+        function toggleSidebar() {
+            document.body.classList.toggle('sidebar-collapsed');
+        }
+        function logout() {
+            // Basic logout wrapper - in real app this clears session
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+
+</html>

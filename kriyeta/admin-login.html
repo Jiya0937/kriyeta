@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal | Pathlynx</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="auth-body admin-mode">
+
+    <!-- Background Layer -->
+    <div class="app-background"></div>
+
+    <div class="auth-container">
+        <div class="auth-card admin-auth-card">
+            <!-- Header -->
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <span class="material-icons-round" style="color:#d93025">terminal</span>
+                    <span>Path<span class="highlight">lynx</span></span>
+                </div>
+                <h2>Admin Portal</h2>
+                <div class="security-warning">
+                    <span class="material-icons-round">lock</span>
+                    <span>Authorized Administrators Only</span>
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <form id="admin-login-form">
+                <div class="input-group">
+                    <label for="admin-id">Admin Username / Email</label>
+                    <div class="icon-input">
+                        <span class="material-icons-round input-icon">badge</span>
+                        <input type="text" id="admin-id" placeholder="admin@pathlynx.edu" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <div class="icon-input password-group">
+                        <span class="material-icons-round input-icon">vpn_key</span>
+                        <input type="password" id="password" placeholder="Enter secure password" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword()">
+                            <span class="material-icons-round" id="eye-icon">visibility_off</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <!-- Reduced options for admin security -->
+                    <a href="#" class="forgot-link" style="margin-left:auto;">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn-primary btn-block btn-admin-action">
+                    <span class="material-icons-round" style="font-size:1.2rem; margin-right:0.5rem;">login</span>
+                    Secure Login
+                </button>
+
+                <!-- Hidden Prompt for Non-existent Accounts -->
+                <div id="admin-create-account-prompt"
+                    style="display: none; margin-top: 1rem; padding: 1rem; background-color: #fff3cd; border: 1px solid #ffeeba; border-radius: 6px; text-align: center;">
+                    <p style="color: #856404; margin-bottom: 0.5rem; font-size: 0.95rem; font-weight: 500;">Admin
+                        account not found. Please create an account.</p>
+                    <a href="admin-register.html" class="btn-outline-sm"
+                        style="display: inline-block; width: auto; color: #856404; border-color: #856404;">Create Admin
+                        Account</a>
+                </div>
+            </form>
+
+            <div class="auth-footer">
+                <p class="admin-help-text" style="display: block; margin-bottom: 0.5rem;">Don't have an admin account?
+                    <a href="admin-register.html" style="color: var(--primary-color); font-weight: 600;">Create one</a>
+                </p>
+                <p class="admin-help-text"><span class="material-icons-round"
+                        style="font-size:1rem; vertical-align:middle;">help_outline</span> Contact IT Support for access
+                    issues.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.textContent = 'visibility';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.textContent = 'visibility_off';
+            }
+        }
+
+        document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('admin-id').value;
+            const password = document.getElementById('password').value;
+            const btn = document.querySelector('.btn-admin-action');
+            const originalText = btn.innerHTML;
+
+            btn.innerHTML = '<span class="material-icons-round spin">sync</span> Verifying...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('http://localhost:5000/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    localStorage.setItem('Admin', JSON.stringify(data));
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    if (res.status === 404) {
+                        // Admin not found
+                        const prompt = document.getElementById("admin-create-account-prompt");
+                        if (prompt) {
+                            prompt.style.display = "block";
+                            prompt.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    } else {
+                        alert(data.message || 'Login failed');
+                    }
+
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Server connection failed');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>
