@@ -16,7 +16,32 @@ exports.analyzeResumeFile = async (filePath, mimeType) => {
     };
 };
 
-// Use Rule-Based Engine
+const { RESUME_EVALUATION_PROMPT } = require('./prompts');
+
+// Mock GenAI Call (Simulating an LLM response)
+exports.generateAIFeedback = async (resumeText) => {
+    // In a real scenario, you would call OpenAI/Gemini API here using RESUME_EVALUATION_PROMPT
+    // For now, we simulate a smart response based on the rule-based findings or heuristics
+
+    return {
+        score: null, // Will be merged/overridden by rule engine or AI specific score
+        strengths: [
+            "Clear section headers used throughout the document.",
+            "Good use of action verbs in project descriptions."
+        ],
+        weaknesses: [
+            "Summary section is generic.",
+            "Lack of quantitative metrics in experience entries."
+        ],
+        missing_skills: ["Cloud Platforms (AWS/Azure)", "CI/CD pipelines"],
+        layout_feedback: "The layout is clean, but the margin usage is inconsistent.",
+        suggestions: [
+            "Quantify your achievements (e.g., 'Improved performance by 20%').",
+            "Tailor your skills section to the specific job description."
+        ]
+    };
+};
+
 exports.calculateScore = (text) => {
     const rawResult = calculateRuleBasedScore(text);
 

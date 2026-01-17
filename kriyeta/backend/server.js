@@ -19,6 +19,7 @@ app.use("/api/internships", require("./routes/internship"));
 app.use("/api/hackathons", require("./routes/hackathon"));
 app.use("/api/roadmaps", require("./routes/roadmaps"));
 app.use("/api/learning", require("./routes/learning"));
+app.use("/api/ai-insight", require("./routes/aiResumeUpload"));
 
 // Connect to MongoDB  ✅ HERE
 connectDB();

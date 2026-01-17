@@ -38,39 +38,11 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
 
+const aiInsightController = require('../controllers/aiInsightController');
+
 // @route   POST /api/ai-insight/resume-score
 // @desc    Upload resume, extract text, and return analysis
 // @access  Public (for demo purposes)
-router.post('/resume-score', upload.single('resume'), async (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ msg: "No file uploaded" });
-    }
-
-    try {
-        const filePath = req.file.path;
-        const fileType = req.file.mimetype;
-
-        // Use the Service Layer to handle parsing + scoring
-        const analysisResult = await aiService.analyzeResumeFile(filePath, fileType);
-
-        // Clean up file
-        fs.unlinkSync(filePath);
-
-        // Return JSON response with both text and score data
-        res.json({
-            success: true,
-            data: {
-                extractedText: analysisResult.text.trim(),
-                score: analysisResult.score,
-                feedback: analysisResult.analysis,
-                originalName: req.file.originalname
-            }
-        });
-
-    } catch (err) {
-        console.error("Resume Processing Error:", err);
-        res.status(500).json({ msg: "Error processing resume file", error: err.message });
-    }
-});
+router.post('/resume-score', upload.single('resume'), aiInsightController.processResumeUpload);
 
 module.exports = router;
